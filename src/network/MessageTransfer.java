@@ -18,7 +18,7 @@ public class MessageTransfer {
             messageReceiver = new Receiver(Configuration.getMyPortNumber(),this);
             messageReceiver.start();
         }catch(IOException ex){
-
+            System.exit(0);
         }
         messageSender = new Sender();
 
@@ -28,7 +28,6 @@ public class MessageTransfer {
 
             if(message.msgType == MessageType.REG || message.msgType == MessageType.UNREG){
 
-                //System.out.print(message.ip_to +" "+message.port_to);
                 char[] respond = messageSender.sendTCP(message.toString(), message.ip_to, message.port_to);
                 String msg = new String(respond);
 

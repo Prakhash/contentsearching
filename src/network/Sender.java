@@ -26,8 +26,7 @@ public class Sender {
             echoSocket.close();
             return buf;
         } catch (Exception e) {
-            System.err.println("Error Connecting to: " + ip);
-            // added for checking purposes
+            System.err.println("Error Connecting to: IP- " + ip+" PORT: "+port);
             Configuration.removeNeighbor(ip, port);
         }
         return null;
@@ -38,14 +37,14 @@ public class Sender {
             DatagramSocket clientSocket = new DatagramSocket();
             InetAddress IPAddress = InetAddress.getByName(ip);
 
-            byte[] sendData = new byte[300];
+            byte[] sendData = new byte[1000];
 
             sendData = msg.getBytes();
             DatagramPacket sendPacket =new DatagramPacket(sendData, sendData.length, IPAddress, port);
 
             clientSocket.send(sendPacket);
         }catch(Exception e){
-            System.out.println("Error sending");
+            System.err.println("Error Connecting to: IP- " + ip+" PORT: "+port);
             Configuration.removeNeighbor(ip, port);
         }
     }

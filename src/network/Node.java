@@ -37,10 +37,10 @@ public class Node {
     public void run(){
 
         this.registerServer();
-        BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader user_input = new BufferedReader(new InputStreamReader(System.in));
         while(true){
             try {
-                String cmd=inFromUser.readLine();
+                String cmd=user_input.readLine();
                 if(cmd.equals("exit")) {
 
                     this.leaveDSSystem();
@@ -49,6 +49,7 @@ public class Node {
                 }
                 else if(cmd.equals("print files")) {this.showLocalFiles();}
                 else if(cmd.equals("print neighbors")) {this.printConnectedNeighbors();}
+                else if(cmd.equals("print backupneighbors")) {this.printBackUpNeighbors();}
                 else if(cmd.length()> 7 && cmd.substring(0,6).equals("search")) this.searchFile(cmd.substring(7));
                 else System.out.println(">>Unknown command");
             } catch (IOException e) {
@@ -64,6 +65,23 @@ public class Node {
         System.out.println("Connected Neighbors:");
 
         List<Neighbor> neighbors = Configuration.getNeighbors();
+
+        Iterator<Neighbor> neighborsIterator = neighbors.iterator();
+        while (neighborsIterator.hasNext()) {
+            Neighbor temp = neighborsIterator.next();
+
+
+            System.out.println(temp.toString());
+
+        }
+
+    }
+
+    public void printBackUpNeighbors(){
+
+        System.out.println("Backup Neighbors:");
+
+        List<Neighbor> neighbors = Configuration.getBackUpNeighbors();
 
         Iterator<Neighbor> neighborsIterator = neighbors.iterator();
         while (neighborsIterator.hasNext()) {
@@ -103,6 +121,7 @@ public class Node {
             case LEAVE:
                 //System.out.println(message.toString());
                 Configuration.removeNeighbor(message.ip_to, message.port_to);
+                this.checkForZeroNeighbors();
                 break;
             case JOIN:
                 Configuration.setNeighbor(message.ip_to, message.port_to);
@@ -113,10 +132,26 @@ public class Node {
         }
     }
 
+
+    public void checkForZeroNeighbors(){
+
+
+        if(Configuration.getNeighbors().size()==0){
+            if(Configuration.getBackUpNeighbors().size()>0){
+                List<Neighbor> neighbors = Configuration.getBackUpNeighbors();
+                Configuration.setNeighbor(neighbors.get(0).getIpAddress(), neighbors.get(0).getPortNumber());
+            }else{
+                System.out.println("This node has no connections.");
+            }
+
+        }
+    }
+
     public void showContainedFiles(Message message){
 
         if(message.noFiles > 0){
-            System.out.println("IP: "+message.ip_from+" PORT: "+message.port_from+" replied with files:");
+            System.out.println("IP: "+message.ip_from+" PORT: "+message.port_from+" replied with files: Hop count:"+message.hops);
+            Configuration.setBackUpNeighbor(message.ip_from, message.port_from);
             String[] names = message.message.split("\"");
             for(int x=0; x<message.noFiles; x++){
 
@@ -172,6 +207,9 @@ public class Node {
                     break;
                 }
             }
+            for(int x=0; x<neigh_count;x++){
+                Configuration.setBackUpNeighbor(msg_data[3 * x + 3], Integer.parseInt(msg_data[3 * x + 4]));
+            }
 
         }
 
@@ -213,9 +251,11 @@ public class Node {
             System.out.println("Searching file locally.");
             ArrayList<String> files = this.searchQueryInLocal(message.query);
             if(files.size() > 0){
+                System.out.println("Files found for query: "+message.query+", Sending reply...");
                 Message serokMsg = new SEROKMessage(files, message.hops,message.ip_from, message.port_from);
                 myMsgTransfer.sendMessage(serokMsg);
             }else{
+                System.out.println("Files not found for query: "+message.query+", forwarding query...");
                 System.out.println("Searching file globally.");
                 forwardSerMsg(message);
             }

@@ -16,6 +16,7 @@ public class Configuration {
     private static int serverPortNumber;
     private static ArrayList<String> myFiles;
     private static List<Neighbor> neighbors = new ArrayList<Neighbor>();
+    private static List<Neighbor> backUpNeighbors = new ArrayList<Neighbor>();
 
 
     public static boolean setConfiguration(String[] configurationDetails){
@@ -79,19 +80,14 @@ public class Configuration {
 
         Neighbor temp = new Neighbor(ip, port);
         if(neighbors.contains(temp)){
-//            System.out.println("has neighbors");
             neighbors.remove(temp);
 
         }
+        if(backUpNeighbors.contains(temp)){
+            backUpNeighbors.remove(temp);
 
+        }
 
-//        Iterator<Neighbor> neighborsIterator = neighbors.iterator();
-//        while (neighborsIterator.hasNext()) {
-//            Neighbor temp = neighborsIterator.next();
-//            if(temp.toString().equals(ip+":"+port)){
-//                neighborsIterator.remove();
-//            }
-//        }
 
     }
     public static ArrayList<String> getMyFiles() {
@@ -104,6 +100,31 @@ public class Configuration {
                 myFiles.add(file);
             }
         }
+    }
+
+    public static void setBackUpNeighbor(String ip, int port){
+        Neighbor temp = new Neighbor(ip, port);
+        if(!backUpNeighbors.contains(temp)){
+
+            backUpNeighbors.add(temp);
+
+        }
+
+    }
+    public static List<Neighbor> getBackUpNeighbors(){
+
+        return backUpNeighbors;
+    }
+    public static void removeBackUpNeighbor(String ip, int port){
+
+
+        Neighbor temp = new Neighbor(ip, port);
+        if(backUpNeighbors.contains(temp)){
+            backUpNeighbors.remove(temp);
+
+        }
+
+
     }
 
 }
