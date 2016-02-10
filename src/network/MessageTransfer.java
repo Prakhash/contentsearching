@@ -96,7 +96,7 @@ public class MessageTransfer {
         }else if(msg_data[1].equals("LEAVE")){
 
             translatedMsg = new LEAVEMessage(msg_data[2], Integer.parseInt(msg_data[3]));
-            System.out.println("LEAVE message received: "+ translatedMsg.ip_from+":"+translatedMsg.port_from);
+            System.out.println("LEAVE message received: "+ translatedMsg.ip_to+":"+translatedMsg.port_to);
             myNode.onMessageReceived(translatedMsg);
 
         }else if(msg_data[1].equals("SEROK")){

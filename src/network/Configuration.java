@@ -64,6 +64,7 @@ public class Configuration {
     public static void setNeighbor(String ip, int port){
         Neighbor temp = new Neighbor(ip, port);
         if(!neighbors.contains(temp)){
+
             neighbors.add(temp);
 
         }
@@ -75,8 +76,10 @@ public class Configuration {
     }
     public static void removeNeighbor(String ip, int port){
 
+
         Neighbor temp = new Neighbor(ip, port);
         if(neighbors.contains(temp)){
+//            System.out.println("has neighbors");
             neighbors.remove(temp);
 
         }

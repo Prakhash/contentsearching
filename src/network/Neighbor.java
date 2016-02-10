@@ -1,11 +1,12 @@
 package network;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /**
 * Created by Ruba on 1/8/2016.
 */
-public class Neighbor implements Comparator<Neighbor> {
+public class Neighbor{
 
     private String ipAddress;
     private int portNumber;
@@ -35,7 +36,9 @@ public class Neighbor implements Comparator<Neighbor> {
     }
 
     @Override
-    public int compare(Neighbor o1, Neighbor o2) {
-        return o1.toString().compareTo(o2.toString());
+    public boolean equals(Object o1) {
+
+        Neighbor temp = (Neighbor) o1;
+        return this.toString().equals(temp.toString());
     }
 }
