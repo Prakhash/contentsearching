@@ -250,6 +250,7 @@ public class Node {
             lastMessage = message;
             System.out.println("Searching file locally.");
             ArrayList<String> files = this.searchQueryInLocal(message.query);
+            Configuration.setBackUpNeighbor(message.ip_from, message.port_from);
             if(files.size() > 0){
                 System.out.println("Files found for query: "+message.query+", Sending reply...");
                 Message serokMsg = new SEROKMessage(files, message.hops,message.ip_from, message.port_from);
