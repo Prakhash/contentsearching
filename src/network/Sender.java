@@ -27,6 +27,9 @@ public class Sender {
             return buf;
         } catch (Exception e) {
             System.err.println("Error Connecting to: IP- " + ip+" PORT: "+port);
+            if(ip.equals(Configuration.getServerIpAddress()) && port==Configuration.getServerPortNumber()){
+                System.exit(0);
+            }
             Configuration.removeNeighbor(ip, port);
         }
         return null;
