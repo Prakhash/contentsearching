@@ -230,14 +230,21 @@ public class Node {
         ArrayList<String> files = Configuration.getMyFiles();
         ArrayList<String> output = new ArrayList<String>();
 
-        String lowercase = query.toLowerCase();
+        String queryLC = query.toLowerCase();
         Iterator<String> fileIterator = files.iterator();
         while (fileIterator.hasNext()) {
             String temp = fileIterator.next();
             String lowercase2 = temp.toLowerCase();
-            if(lowercase2.contains(lowercase)){
-                output.add(temp);
+            String[] words=lowercase2.split(" ");
+            for (int i = 0; i < words.length; i++) {
+                if (queryLC.matches(words[i])) {
+                    output.add(temp);
+                    break;
+                }
             }
+//            if (lowercase2.contains(queryLC)) {
+//                output.add(temp);
+//            }
         }
 
         return output;
