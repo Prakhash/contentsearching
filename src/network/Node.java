@@ -256,6 +256,8 @@ public class Node {
                 Message serokMsg = new SEROKMessage(files, message.hops,message.ip_from, message.port_from);
                 myMsgTransfer.sendMessage(serokMsg);
             }else{
+                Message serokMsg = new SEROKMessage(files, message.hops,message.ip_from, message.port_from);
+                myMsgTransfer.sendMessage(serokMsg);
                 System.out.println("Files not found for query: "+message.query+", forwarding query...");
                 System.out.println("Searching file globally.");
                 forwardSerMsg(message);

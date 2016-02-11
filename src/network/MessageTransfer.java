@@ -18,6 +18,7 @@ public class MessageTransfer {
             messageReceiver = new Receiver(Configuration.getMyPortNumber(),this);
             messageReceiver.start();
         }catch(IOException ex){
+            System.out.println("Cannot start receiver thread....");
             System.exit(0);
         }
         messageSender = new Sender();
